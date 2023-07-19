@@ -1,59 +1,87 @@
-/*Ahorcado Juego en Consola C++ */
+//Ahorcado en C++
 
 #include<iostream>
-#include<cstdlib>
+#include<string>
 #include<time.h>
-#include<Windows.h>
 
-std::string seguir = "S";
-std::string palabrasF[3] = { "CONSOLA","DISCORD","GAMER"};
-std::string palabrasN[3] = { "BANEADO","CAMPERO","CHETADO" };
-std::string palabrasD[3] = { "BUFF","NERF","CRAFTEO" };
-std::string palabrasE[3] = { "GOTY","KAPPA","PUSHEAR" };
-int ops = 0;
+std::string palabra_original = "";
+std::string palabra_mostrar = "";
+int vidas = 0;
 
-void opsElegir()
+void mostrar()
 {
-	switch (ops)
+	std::cout << "\nVidas: " << vidas << "\n";
+	std::cout << palabra_mostrar << "\n";
+}
+
+void ingresar(char x)
+{
+	bool perdiVidas = true;
+
+	for (int i = 0; i < palabra_original.length(); i++)
 	{
-	case 1:	break;
+		if (x == palabra_original[i])
+		{
+			perdiVidas = false;
+			palabra_mostrar[i] = x;
+		}
+	}
 
-	case 2:	break;
-
-	case 3:	break;
-
-	case 4:	break;
-
-	default: break;
+	if (perdiVidas == true) 
+	{
+		vidas--;
 	}
 }
 
-void Inicio()
+void inicializar()
 {
-	std::cout << "BIENVENIDO AL AHORCADO\n"; Sleep(777);
-	std::cout << "En este juego debes adivinar la palabra correcta!\n"; Sleep(1500);
-	std::cout << "Elige la dificultad: \n";
+	vidas = 5;
+	palabra_original = "Codigo Terminado";
 
-	std::cout << "1.Facil\n2.Normal\n3.Dificil\n4.Extremo!\n\n"; std::cin >> ops;
-	do 
+	for (int i = 0; i < palabra_original.length(); i++)
 	{
-		std::cout << "\nError. Seleccione una opcion: \n";
-		std::cout << "1.Facil\n2.Normal\n3.Dificil\n4.Extremo!\n\n"; std::cin >> ops;
-	} while (ops != 1 and ops != 2 and ops != 3 and ops != 4);
-	system("CLS"); opsElegir();
+		if (palabra_original[i] >= 'A' && palabra_original[i] <= 'Z')
+		{
+			palabra_original[i] += 32;
+		}
+	}
+
+	for (int i = 0; i < palabra_original.length(); i++)
+	{
+		if (palabra_original[i] >= 'a' && palabra_original[i] <= 'z')
+		{
+			palabra_mostrar+= '_';
+		}
+		else
+		{
+			palabra_mostrar += palabra_original[i];
+		}
+	}
 }
 
 int main()
 {
 	system("CLS");
-
-	do
+	
+	inicializar();
+	mostrar();
+	while (vidas > 0 && palabra_mostrar != palabra_original)
 	{
-		Inicio();
-		std::cout << "Desea seguir jugando?\n";
-		std::cout << "S para Si, N para No\n"; std::cin >> seguir;
-
-	}while (seguir == "S" or seguir == "s");
+		std::cout << "Solo escribe en minusculas!\n";
+		char x;
+		std::cin >> x;
+		ingresar(x);
+		mostrar();
+		
+	}
+	if (vidas > 0)
+	{
+		std::cout << "Ganaste!\n";
+	}
+	else
+	{
+		std::cout << "Perdiste!\nLa palabra era: " << palabra_original << " \n";
+	}
 
 	system("pause");
 	return 0;
